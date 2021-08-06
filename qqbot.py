@@ -22,7 +22,7 @@ for a in qq_group:
 def inc(db_name = "", qq_id = "",con_id = ""):
     db = sqlite3.connect("qq.db")
     cur=db.cursor()
-    cur.execute("INSERT INTO qq"+db_name+" values("+qq_id+","+con_id+")")
+    cur.execute("INSERT INTO qq"+db_name+" values(?,?)",(str(qq_id),str(con_id)))
     db.commit()
     cur.close()
     db.close()
@@ -79,8 +79,8 @@ def server():
     ##进群消息
     if data["post_type"] == "notice" and data["notice_type"] == "group_increase":
         con_id = random.sample('zyxwvutsrqponmlkjihgfedcba',8)
-        inc(str(data["group_id"]),str(data["user_id"]),con_id)
-        group_msg(data["group_id"],"请在群内发送以下字符串\n"+con_id+"\n然后您将可以在本群发言")
+        inc(str(data["group_id"]),str(data["user_id"]),str(con_id))
+        group_msg(data["group_id"],"请在群内发送以下字符串\n"+str(con_id)+"\n然后您将可以在本群发言")
     if data["post_type"] == "message": 
         if str(data["group_id"]) in qq_group:     
             result = check(str(data["group_id"]),str(data["user_id"]))
